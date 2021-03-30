@@ -1,0 +1,107 @@
+#!/bin/sh
+
+# PROVIDE: logitechmediaserver
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+# Add the following lines to /etc/rc.conf to enable logitechmediaserver on startup:
+# logitechmediaserver_enable="YES"
+
+# Optional configuration parameters:
+# Directory where logitechmediaserver writes it's logs to.
+# logitechmediaserver_logdir="/var/log/logitechmediaserver"
+#
+# Directory where logitechmediaserver stores it's cache files.
+# logitechmediaserver_cachedir="/var/db/logitechmediaserver/cache"
+#
+# Directory where logitechmediaserver stores it's configuration.
+# logitechmediaserver_prefsdir="/var/db/logitechmediaserver/prefs"
+#
+# Directory where logitechmediaserver stores the playlists. THIS NEEDS TO BE CONFIGURED THROUGH THE UI.
+# logitechmediaserver_playlistdir="/var/db/logitechmediaserver/playlists"
+#
+# Additional parameters, e.g. "--noimage --novideo"
+# logitechmediaserver_flags=""
+#
+# The charset logitechmediaserver uses.
+# logitechmediaserver_charset="UTF-8"
+#
+# logitechmediaserver_lc_ctype="en_US.UTF.8"
+
+. /etc/rc.subr
+
+name=logitechmediaserver
+rcvar=logitechmediaserver_enable
+
+pidfile=/var/run/${name}/${name}.pid
+logitechmediaserver_user=squeezebox
+logitechmediaserver_group=squeezebox
+
+work_dir="/var/lib/${name}"
+log_dir="/var/log/${name}"
+home_dir="/usr/local/share/${name}"
+
+load_rc_config ${name}
+
+: ${logitechmediaserver_enable="NO"}
+: ${logitechmediaserver_logdir=${log_dir}}
+: ${logitechmediaserver_cachedir="${work_dir}/cache"}
+: ${logitechmediaserver_prefsdir="${work_dir}/prefs"}
+: ${logitechmediaserver_playlistdir="${work_dir}/playlists"}
+: ${logitechmediaserver_flags=""}
+: ${logitechmediaserver_charset="UTF-8"}
+: ${logitechmediaserver_lc_ctype="en_US.UTF-8"}
+
+command_interpreter=/usr/bin/perl
+command=/usr/local/share/logitechmediaserver/slimserver.pl
+command_args="\
+--daemon \
+--pidfile=${pidfile} \
+--logdir=${logitechmediaserver_logdir} \
+--cachedir=${logitechmediaserver_cachedir} \
+--prefsdir=${logitechmediaserver_prefsdir} \
+--charset=${logitechmediaserver_charset} \
+${logitechmediaserver_flags}"
+
+start_precmd="logitechmediaserver_start_precmd"
+stop_postcmd="logitechmediaserver_stop_postcmd"
+
+logitechmediaserver_start_precmd()
+{
+	export LC_CTYPE="${logitechmediaserver_lc_ctype}"
+
+	if [ ! -d "${pidfile%/*}" ]; then	
+		install -d -o ${logitechmediaserver_user} -g ${logitechmediaserver_group} ${pidfile%/*};
+	fi
+
+	if [ ! -d "${logitechmediaserver_logdir}" ]; then
+		install -d -o ${logitechmediaserver_user} -g ${logitechmediaserver_group} "${logitechmediaserver_logdir}";
+	fi
+
+	if [ ! -d "${logitechmediaserver_cachedir}" ]; then
+		install -d -o ${logitechmediaserver_user} -g ${logitechmediaserver_group} "${logitechmediaserver_cachedir}";
+	fi
+
+	if [ ! -d "${logitechmediaserver_prefsdir}" ]; then
+		install -d -o ${logitechmediaserver_user} -g ${logitechmediaserver_group} "${logitechmediaserver_prefsdir}";
+	fi
+
+	if [ ! -d "${logitechmediaserver_playlistdir}" ]; then
+		install -d -o ${logitechmediaserver_user} -g ${logitechmediaserver_group} "${logitechmediaserver_playlistdir}";
+	fi
+}
+
+logitechmediaserver_stop_postcmd()
+{
+	pids=`pgrep -u ${logitechmediaserver_user}`
+	if [ -n "${pids}" ]; then
+		sleep 1
+		kill $pids > /dev/null 2>&1
+	fi
+	pids=`pgrep -u ${logitechmediaserver_user}`
+	if [ -n "${pids}" ]; then
+		wait_for_pids $pids
+	fi
+}
+
+run_rc_command "$1"
