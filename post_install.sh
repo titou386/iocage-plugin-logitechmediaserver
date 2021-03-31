@@ -12,9 +12,6 @@ logitechmediaserver_group=squeezebox
 pw groupadd -n $logitechmediaserver_group
 pw useradd -n $logitechmediaserver_user -g $logitechmediaserver_group -s /usr/sbin/nologin -c "Logitech Media Server" -d /usr/local/share/logitechmediaserver
 
-if [ -f "logitechmediaserver.tgz" ]; then
-	rm -fr logitechmediaserver.tgz
-fi
 
 # Download the latest 8.1 logitech media sever
 curl -o logitechmediaserver.tgz http://downloads-origin.slimdevices.com/nightly$(curl $package_version_url | grep -o '/8.1[^"]*[0-9].tgz')
