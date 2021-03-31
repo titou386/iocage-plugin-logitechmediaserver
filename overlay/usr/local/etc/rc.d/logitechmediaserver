@@ -68,10 +68,12 @@ stop_postcmd="logitechmediaserver_stop_postcmd"
 
 logitechmediaserver_start_precmd()
 {
-	if [ ! -f '/usr/bin/perl' ] && [ 'grep "/usr/bin/perl" -f ${home_dir}/slimserver.pl' ]; then
-		grep "/usr/bin/perl" ${home_dir}/*.pl | cut -d ":" -f 1 | while IFS="" read -r file; do
-			sed  -i '' '1s/#!\/usr\/bin\/perl/#!\/usr\/bin\/env perl/' "$file"
-		done
+	if [ ! -f '/usr/bin/perl' ] ; then
+		if grep -q "/usr/bin/perl" ${home_dir}/*.pl ; then
+			grep "/usr/bin/perl" ${home_dir}/*.pl | cut -d ":" -f 1 | while IFS="" read -r file; do
+				sed  -i '' '1s/#!\/usr\/bin\/perl/#!\/usr\/bin\/env perl/' "$file"
+			done
+		fi
 	fi
 
 	export LC_CTYPE="${logitechmediaserver_lc_ctype}"
