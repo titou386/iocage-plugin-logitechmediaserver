@@ -68,6 +68,10 @@ stop_postcmd="logitechmediaserver_stop_postcmd"
 
 logitechmediaserver_start_precmd()
 {
+	if [ ! -f "/usr/bin/perl" ]; then
+		ln -s /usr/local/bin/perl /usr/bin/perl
+	fi
+	
 	export LC_CTYPE="${logitechmediaserver_lc_ctype}"
 
 	if [ ! -d "${pidfile%/*}" ]; then	
