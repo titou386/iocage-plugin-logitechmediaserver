@@ -28,6 +28,7 @@ mv logitechmediaserver /usr/local/share
 perl_major_version=$(perl -e 'print "$^V\n"' | cut -c 2- | cut -d "." -f 1)
 perl_version=$(perl -e 'print "$^V\n"' | cut -d "." -f 2)
 if [ -d "/tmp/${perl_major_version}.${perl_version}" ]; then
+    rm -fr ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
 	mv -f /tmp/${perl_major_version}.${perl_version} ${home_dir}/CPAN/arch
 else
 	err 1 "No Binary CPAN matching with your Perl version."
@@ -42,11 +43,6 @@ chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${work_dir}
 mkdir ${log_dir}
 chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${log_dir}
 
-
-# slimserver.pl shebang
-if [ ! -f /usr/bin/perl ]; then
-	ln -s /usr/local/bin/perl /usr/bin/perl
-fi
 
 sysrc -f /etc/rc.conf ${service_name}_logdir=${log_dir}
 sysrc -f /etc/rc.conf ${service_name}_cachedir="${work_dir}/cache"
