@@ -52,7 +52,7 @@ load_rc_config ${name}
 : ${logitechmediaserver_charset="UTF-8"}
 : ${logitechmediaserver_lc_ctype="en_US.UTF-8"}
 
-command_interpreter=/usr/bin/perl
+command_interpreter=/usr/local/bin/perl
 command=/usr/local/share/logitechmediaserver/slimserver.pl
 command_args="\
 --daemon \
@@ -68,6 +68,14 @@ stop_postcmd="logitechmediaserver_stop_postcmd"
 
 logitechmediaserver_start_precmd()
 {
+	if [ ! -f '/usr/bin/perl' ] ; then
+		if grep -q "/usr/bin/perl" ${home_dir}/*.pl ; then
+			grep "/usr/bin/perl" ${home_dir}/*.pl | cut -d ":" -f 1 | while IFS="" read -r file; do
+				sed  -i '' '1s/#!\/usr\/bin\/perl/#!\/usr\/bin\/env perl/' "$file"
+			done
+		fi
+	fi
+
 	export LC_CTYPE="${logitechmediaserver_lc_ctype}"
 
 	if [ ! -d "${pidfile%/*}" ]; then	
