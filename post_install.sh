@@ -28,13 +28,13 @@ mv logitechmediaserver /usr/local/share
 perl_major_version=$(perl -e 'print "$^V\n"' | cut -c 2- | cut -d "." -f 1)
 perl_version=$(perl -e 'print "$^V\n"' | cut -d "." -f 2)
 if [ -d "/tmp/${perl_major_version}.${perl_version}" ]; then
-    if [ -d "${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}" ]; then
+    if [ ! -d "${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}" ]; then
         mkdir ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
     fi
-	mv /tmp/${perl_major_version}.${perl_version}/amd64-freebsd-thread-multi ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
+    mv /tmp/${perl_major_version}.${perl_version}/amd64-freebsd-thread-multi ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version} > /dev/null 2>&1
     rm -fr /tmp/${perl_major_version}.${perl_version}
 else
-	err 1 "No Binary CPAN matching with your Perl version."
+    err 1 "No Binary CPAN matching with your Perl version."
 fi
 
 chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${home_dir}
@@ -47,13 +47,13 @@ mkdir ${log_dir}
 chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${log_dir}
 
 
-sysrc -f /etc/rc.conf ${service_name}_logdir=${log_dir}
-sysrc -f /etc/rc.conf ${service_name}_cachedir="${work_dir}/cache"
-sysrc -f /etc/rc.conf ${service_name}_prefsdir="${work_dir}/prefs"
-sysrc -f /etc/rc.conf ${service_name}_playlistdir="${work_dir}/playlists"
-sysrc -f /etc/rc.conf ${service_name}_flags=""
-sysrc -f /etc/rc.conf ${service_name}_charset="UTF-8"
-sysrc -f /etc/rc.conf ${service_name}_lc_ctype="en_US.UTF-8"
+sysrc -f /etc/rc.conf ${service_name}_logdir=${log_dir} > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_cachedir="${work_dir}/cache" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_prefsdir="${work_dir}/prefs" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_playlistdir="${work_dir}/playlists" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_flags="" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_charset="UTF-8" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_lc_ctype="en_US.UTF-8" > /dev/null 2>&1
 
 # Enable and start Logitech Media Server
 chmod +x "/usr/local/etc/rc.d/${service_name}"

@@ -103,12 +103,18 @@ logitechmediaserver_stop_postcmd()
 {
 	pids=`pgrep -u ${logitechmediaserver_user}`
 	if [ -n "${pids}" ]; then
-		sleep 1
-		kill $pids > /dev/null 2>&1
+		for p in ${pids}
+		do
+			sleep 1
+			kill $pids > /dev/null 2>&1
+		done
 	fi
 	pids=`pgrep -u ${logitechmediaserver_user}`
 	if [ -n "${pids}" ]; then
-		wait_for_pids $pids
+		for p in ${pids}
+		do
+			wait_for_pids $pids
+		done
 	fi
 }
 
