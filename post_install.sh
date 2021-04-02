@@ -24,12 +24,15 @@ rm -fr logitechmediaserver.tgz
 mv logitechmediaserver-* logitechmediaserver
 mv logitechmediaserver /usr/local/share
 
-# Find the perl version x.y or x.yy
+# Find the perl version x.y or x.yy and place in Logitech Media Server directory.
 perl_major_version=$(perl -e 'print "$^V\n"' | cut -c 2- | cut -d "." -f 1)
 perl_version=$(perl -e 'print "$^V\n"' | cut -d "." -f 2)
 if [ -d "/tmp/${perl_major_version}.${perl_version}" ]; then
-    rm -fr ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
-	mv -f /tmp/${perl_major_version}.${perl_version} ${home_dir}/CPAN/arch
+    if [ -d "${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}" ]; then
+        mkdir ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
+    fi
+	mv /tmp/${perl_major_version}.${perl_version}/amd64-freebsd-thread-multi ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
+    rm -fr /tmp/${perl_major_version}.${perl_version}
 else
 	err 1 "No Binary CPAN matching with your Perl version."
 fi
