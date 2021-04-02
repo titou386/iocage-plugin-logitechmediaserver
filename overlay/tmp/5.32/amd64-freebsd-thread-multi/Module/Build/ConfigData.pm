@@ -169,33 +169,33 @@ do{ my $x = [
        {},
        {},
        {
-         'manpage_support' => {
-                                'requires' => {
-                                                'Pod::Man' => 0
-                                              },
-                                'description' => 'Create Unix man pages'
-                              },
-         'HTML_support' => {
-                             'description' => 'Create HTML documentation',
-                             'requires' => {
-                                             'Pod::Html' => 0
-                                           }
-                           },
          'C_support' => {
                           'description' => 'Compile/link C & XS code',
-                          'requires' => {
-                                          'ExtUtils::CBuilder' => '0.15'
-                                        },
                           'recommends' => {
                                             'ExtUtils::ParseXS' => '1.02'
-                                          }
+                                          },
+                          'requires' => {
+                                          'ExtUtils::CBuilder' => '0.15'
+                                        }
                         },
          'YAML_support' => {
                              'description' => 'Use YAML.pm to write META.yml files',
                              'requires' => {
                                              'YAML' => ' >= 0.35, != 0.49_01 '
                                            }
-                           }
+                           },
+         'HTML_support' => {
+                             'requires' => {
+                                             'Pod::Html' => 0
+                                           },
+                             'description' => 'Create HTML documentation'
+                           },
+         'manpage_support' => {
+                                'description' => 'Create Unix man pages',
+                                'requires' => {
+                                                'Pod::Man' => 0
+                                              }
+                              }
        }
      ];
 $x; }
