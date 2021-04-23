@@ -14,10 +14,11 @@ pw useradd -n $logitechmediaserver_user -g $logitechmediaserver_group -s /usr/sb
 
 
 # Download the latest 8.1 logitech media sever
-curl -o logitechmediaserver.tgz http://downloads-origin.slimdevices.com/nightly$(curl $package_version_url | grep -o '/8.1[^"]*[0-9].tgz')
+curl -o logitechmediaserver.tgz http://downloads-origin.slimdevices.com/nightly$(curl $package_version_url | grep -o '/8.1[^"]*[0-9]-noCPAN.tgz')
 tar xjf logitechmediaserver.tgz
 if [ ! -f "logitechmediaserver.tgz" ]; then
-	err 1 "logitechmediaserver.tgz not found."
+    echo "logitechmediaserver.tgz not found."
+    exit 1
 fi
 
 rm -fr logitechmediaserver.tgz
@@ -34,7 +35,8 @@ if [ -d "/tmp/${perl_major_version}.${perl_version}" ]; then
     mv /tmp/${perl_major_version}.${perl_version}/amd64-freebsd-thread-multi ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version} > /dev/null 2>&1
     rm -fr /tmp/${perl_major_version}.${perl_version}
 else
-    err 1 "No Binary CPAN matching with your Perl version."
+    echo "No Binary CPAN matching to your Perl version."
+    exit 1
 fi
 
 chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${home_dir}
