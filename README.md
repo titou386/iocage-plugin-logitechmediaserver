@@ -38,6 +38,6 @@ If LMS is broken delete ShairTunes2W or RaopBridge folder in /var/lib/logitechme
 
 ## Source ...
 
-Instruction for build : [https://audiodigitale.eu/?p=87](https://audiodigitale.eu/?p=87)
-Docker repository : [https://hub.docker.com/r/lmscommunity/logitechmediaserver](https://hub.docker.com/r/lmscommunity/logitechmediaserver)
+Instruction for build : [https://audiodigitale.eu/?p=87](https://audiodigitale.eu/?p=87)\
+Docker repository : [https://hub.docker.com/r/lmscommunity/logitechmediaserver](https://hub.docker.com/r/lmscommunity/logitechmediaserver)\
 Forum : [https://forums.slimdevices.com/](https://forums.slimdevices.com/)
