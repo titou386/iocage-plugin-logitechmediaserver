@@ -16,12 +16,13 @@ pw useradd -n $logitechmediaserver_user -g $logitechmediaserver_group -s /usr/sb
 # Download the latest 8.1 logitech media sever
 echo "Downloading the latest stable version of LMS ..."
 curl -s -o logitechmediaserver.tgz http://downloads.slimdevices.com/nightly$(curl -s $package_version_url | grep -o '/8.1[^"]*[0-9]-noCPAN.tgz')
-if [ ! -f "logitechmediaserver.tgz" ]; then
-    echo "logitechmediaserver.tgz not found."
-    exit 1
-fi
+
 echo "Extracting and installing ..."
 tar xjf logitechmediaserver.tgz
+if [[ $? -ne 0 ]]; then
+    exit $?
+fi
+
 rm -fr logitechmediaserver.tgz
 mv logitechmediaserver-* logitechmediaserver
 mv logitechmediaserver /usr/local/share
