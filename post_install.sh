@@ -14,13 +14,14 @@ pw useradd -n $logitechmediaserver_user -g $logitechmediaserver_group -s /usr/sb
 
 
 # Download the latest 8.1 logitech media sever
-curl -o logitechmediaserver.tgz http://downloads.slimdevices.com/nightly$(curl $package_version_url | grep -o '/8.1[^"]*[0-9]-noCPAN.tgz')
-tar xjf logitechmediaserver.tgz
+echo "Downloading the latest stable version of LMS ..."
+curl -s -o logitechmediaserver.tgz http://downloads.slimdevices.com/nightly$(curl -s $package_version_url | grep -o '/8.1[^"]*[0-9]-noCPAN.tgz')
 if [ ! -f "logitechmediaserver.tgz" ]; then
     echo "logitechmediaserver.tgz not found."
     exit 1
 fi
-
+echo "Extracting and installing ..."
+tar xjf logitechmediaserver.tgz
 rm -fr logitechmediaserver.tgz
 mv logitechmediaserver-* logitechmediaserver
 mv logitechmediaserver /usr/local/share
@@ -44,15 +45,15 @@ chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${work_dir}
 
 mkdir ${log_dir}
 chown -R ${logitechmediaserver_user}:${logitechmediaserver_group} ${log_dir}
+echo "Done."
 
-
-sysrc -f /etc/rc.conf ${service_name}_logdir=${log_dir}
-sysrc -f /etc/rc.conf ${service_name}_cachedir="${work_dir}/cache"
-sysrc -f /etc/rc.conf ${service_name}_prefsdir="${work_dir}/prefs"
-sysrc -f /etc/rc.conf ${service_name}_playlistdir="${work_dir}/playlists"
-sysrc -f /etc/rc.conf ${service_name}_flags=""
-sysrc -f /etc/rc.conf ${service_name}_charset="UTF-8"
-sysrc -f /etc/rc.conf ${service_name}_lc_ctype="en_US.UTF-8"
+sysrc -f /etc/rc.conf ${service_name}_logdir=${log_dir} > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_cachedir="${work_dir}/cache" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_prefsdir="${work_dir}/prefs" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_playlistdir="${work_dir}/playlists" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_flags="" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_charset="UTF-8" > /dev/null 2>&1
+sysrc -f /etc/rc.conf ${service_name}_lc_ctype="en_US.UTF-8" > /dev/null 2>&1
 
 # Enable and start Logitech Media Server
 chmod +x "/usr/local/etc/rc.d/${service_name}"
