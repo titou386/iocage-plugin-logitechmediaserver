@@ -20,7 +20,7 @@ curl -s -o logitechmediaserver.tgz http://downloads.slimdevices.com/nightly$(cur
 echo "Extracting and installing ..."
 tar xjf logitechmediaserver.tgz
 if [[ $? -ne 0 ]]; then
-    exit $?
+    exit 1
 fi
 
 rm -fr logitechmediaserver.tgz
@@ -34,7 +34,7 @@ if [ -d "/tmp/${perl_major_version}.${perl_version}" ]; then
     mv /tmp/${perl_major_version}.${perl_version}/* ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
     rm -fr /tmp/${perl_major_version}.${perl_version}
 else
-    echo "No Binary CPAN matching to your Perl version."
+    echo "No CPAN Binary matching to your Perl version."
     exit 1
 fi
 

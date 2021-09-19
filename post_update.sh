@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#Just for test
+ps h -p $$ -o args='' | cut -f1 -d' '
+
 package_version_url="http://downloads.slimdevices.com/nightly/?ver=8.1"
 service_name="logitechmediaserver"
 work_dir="/var/lib/${service_name}"
@@ -11,7 +14,7 @@ logitechmediaserver_group=squeezebox
 
 chmod +x "/usr/local/etc/rc.d/${service_name}"
 service "${service_name}" start
-if [[ $? -ne 0 ]]; then
+if [ $? -ne 0 ]; then
     # Find the perl version x.y or x.yy
     perl_major_version=$(perl -e 'print "$^V\n"' | cut -c 2- | cut -d "." -f 1)
     perl_version=$(perl -e 'print "$^V\n"' | cut -d "." -f 2)
@@ -20,11 +23,11 @@ if [[ $? -ne 0 ]]; then
         cp -a /tmp/${perl_major_version}.${perl_version}/* ${home_dir}/CPAN/arch/${perl_major_version}.${perl_version}
         rm -fr /tmp/${perl_major_version}.${perl_version}
     else
-        echo "No Binary CPAN matching to your Perl version."
+        echo "No CPAN Binary matching to your Perl version."
         exit 1
     fi
     service "${service_name}" start
-    if [[ $? -ne 0 ]]; then
-        exit $?
+    if [ $? -ne 0 ]; then
+        exit 1
     fi
 fi
