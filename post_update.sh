@@ -32,6 +32,7 @@ if [ $? -ne 0 ]; then
         service "${service_name}" start
     else 
         service "${service_name}" restart
+    fi
 
     sleep 5
     curl -s http://127.0.0.1:9000 > /dev/null
