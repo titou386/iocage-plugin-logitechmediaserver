@@ -52,7 +52,7 @@ load_rc_config ${name}
 : ${logitechmediaserver_charset="UTF-8"}
 : ${logitechmediaserver_lc_ctype="en_US.UTF-8"}
 
-command_interpreter=/usr/local/bin/perl
+command_interpreter=perl
 command=/usr/local/share/logitechmediaserver/slimserver.pl
 command_args="\
 --daemon \
